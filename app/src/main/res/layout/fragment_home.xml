@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="avtUser"
+            type="com.example.socialapp.model.DataUser" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/barCreatPost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="#494444">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_top"
+                app:layout_scrollFlags="scroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_avatar"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:paddingStart="12dp"
+                        android:src="@drawable/abc"
+                        setAvt="@{avtUser.avatar}"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_creat_post"
+                        android:layout_width="0dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/selectable_item"
+                        android:gravity="center_vertical"
+                        android:paddingStart="12dp"
+                        android:text="Bạn đang nghĩ gì?"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/iv_avatar"
+                        app:layout_constraintTop_toTopOf="@id/iv_avatar" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+      <androidx.cardview.widget.CardView
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/barCreatPost">
+
+          <androidx.recyclerview.widget.RecyclerView
+              android:id="@+id/rc_post"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="#BAB7B7"
+              tools:listitem="@layout/item_post" />
+      </androidx.cardview.widget.CardView>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_error"
+            android:layout_gravity="center"
+            android:text="Không có dữ liệu"
+            android:visibility="gone"
+            android:textColor="#5C5252"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

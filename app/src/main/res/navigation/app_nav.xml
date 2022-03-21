@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/app_nav"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.example.socialapp.fragment.UserFragment"
+        android:label="UserFragment">
+        <action
+            android:id="@+id/action_userFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.socialapp.fragment.ProfileFragment"
+        android:label="ProfileFragment">
+
+<!--        <argument-->
+<!--            android:name="username"-->
+<!--            app:argType="string" />-->
+
+
+        <action
+            android:id="@+id/action_profileFragment_to_updateProfile"
+            app:destination="@id/updateProfile" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateProfile"
+        android:name="com.example.socialapp.fragment.UpdateProfile"
+        android:label="UpdateProfile" >
+        <argument android:name="firstName"
+                    app:argType="string"/>
+        <argument android:name="lastName"
+                app:argType="string"/>
+        <argument android:name="gender"
+                app:argType="string"/>
+        <argument android:name="highSchool"
+                app:argType="string"/>
+        <argument android:name="university"
+                app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.socialapp.fragment.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_userByIdFragment"
+            app:destination="@id/userByIdFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postDetailFragment"
+        android:name="com.example.socialapp.fragment.post.PostDetailFragment"
+        android:label="PostDetailFragment" >
+        <action
+            android:id="@+id/action_postDetailFragment_to_userByIdFragment"
+            app:destination="@id/userByIdFragment" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userByIdFragment"
+        android:name="com.example.socialapp.fragment.userbyid.UserByIdFragment"
+        android:label="UserByIdFragment" />
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.example.socialapp.fragment.post.CreatePostFragment"
+        android:label="CreatePostFragment" />
+</navigation>
