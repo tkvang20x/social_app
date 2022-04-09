@@ -5,6 +5,10 @@ import com.example.socialapp.model.*
 import com.example.socialapp.model.comment.Comment
 import com.example.socialapp.model.comment.PostComment
 import com.example.socialapp.model.creatpost.CreatePost
+import com.example.socialapp.model.login.DataLogin
+import com.example.socialapp.model.login.Login
+import com.example.socialapp.model.register.DataRegister
+import com.example.socialapp.model.register.GetRegister
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -51,13 +55,10 @@ interface Api {
 //    fun getDataPost(@Header("Authorization") token: String?): Call<Post?>?
 
     @GET("/v1/posts")
-    fun getPostPage(
-        @Header("Authorization") token: String?,
-        @Query("page") page: String
-    ): Call<Post>
+    fun getPostPage(@Header("Authorization") token: String?, @Query("page") page: String): Call<Post>
 
     @GET("/v1/posts/{id}")
-    fun getUserPostsPage(@Path("id") id: String?, @Query("page") page: String?): Call<Post?>?
+    fun getUserPostsPage(@Header("Authorization") token: String?,@Path("id") id: String?, @Query("page") page: String?): Call<Post?>?
 
     @GET("/v1/posts/detail/{id}")
     fun getPostDetail(@Header("Authorization") token: String?, @Path("id") id: String?): Call<PostComplete?>?
@@ -80,4 +81,10 @@ interface Api {
 
     @GET("/v1/posts/dislike/{id}")
     fun getDislikePost(@Header("Authorization") token: String?, @Path("id") id: String?): Call<Like?>?
+
+    @POST("/auth/login")
+    fun postLogin(@Body login: Login) : Call<DataLogin>
+
+    @POST("/auth/register")
+    fun postRegister(@Body dataRegister: DataRegister) : Call<GetRegister>
 }

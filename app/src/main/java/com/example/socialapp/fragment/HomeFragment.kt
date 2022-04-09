@@ -1,6 +1,7 @@
 package com.example.socialapp.fragment
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -26,6 +27,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),PostAdapter.IPost {
     private val posts = arrayListOf<PostX>()
     private var page: Int = 0
     private var isLastPage = false
+    private  var id:String= ""
     override fun getLayoutId(): Int {
         return R.layout.fragment_home
     }
@@ -43,15 +45,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),PostAdapter.IPost {
             findNavController().navigate(action)
         }
 
+
         userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
         userViewModel.getDataUser()
         userViewModel.data1.observe(viewLifecycleOwner, {
 
             if (it== null) {
                 binding.ivAvatar.setImageResource(R.mipmap.ic_launcher)
-
             } else {
                 binding.avtUser = it.data
+                id= it.data._id.toString()
 //                Log.d("avatar", "${it.data.avatar}")
             }
         })
@@ -68,10 +71,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),PostAdapter.IPost {
           }
         Load.hideLoading()
         })
-
-
-
-
 
 
         adapter = PostAdapter(posts,this)
@@ -105,34 +104,41 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),PostAdapter.IPost {
     fun loadMore() {
         page += 1
         postViewModel.getPostPage(page.toString())
-        postViewModel.dataPost.observe(viewLifecycleOwner, {
-            if (it != null) {
-                if (it.data.posts.size == 0) {
-                    isLastPage = true
-                } else {
+                postViewModel.dataPost.observe(viewLifecycleOwner, {
+                    if (it != null) {
+                        if (it.data.posts.size == 0) {
+                            isLastPage = true
+                        } else {
 //                posts.clear()
-                    posts.addAll(it.data.posts)
-                    adapter.notifyDataSetChanged()
-                    isLastPage = false
-                }
-            } else {
-                return@observe
-            }
-        })
+                            posts.addAll(it.data.posts)
+                            adapter.notifyItemInserted(posts.size-1)
+                            isLastPage = false
+                        }
+                    } else {
+                        return@observe
+                    }
+                })
+
     }
 
     override fun onItemClick(item: PostX?, position: Int?) {
-        Toast.makeText(this.context,"click",Toast.LENGTH_SHORT).show()
-        Log.d("click","click ${position} +${item.toString()}")
-
         val bundle= Bundle()
         bundle.putParcelable("postX",item)
+        bundle.putString("id_user",id)
         findNavController().navigate(R.id.action_homeFragment_to_postDetailFragment,bundle)
-
+        posts.clear()
     }
 
     override fun onClickAvt(item: PostX?) {
-        Log.d("avatar","${item.toString()}")
+        if(item?.user_id.toString()== id){
+            findNavController().navigate(R.id.action_homeFragment_to_userFragment)
+            posts.clear()
+        }else{
+            val bundle =Bundle()
+            bundle.putString("id",item?.user_id.toString())
+            findNavController().navigate(R.id.action_homeFragment_to_userByIdFragment,bundle)
+            posts.clear()
+        }
     }
 
 

@@ -18,7 +18,7 @@ class UserViewModel : ViewModel() {
     private val api: Api
     var data1: MutableLiveData<User>
      var dataAvatar: MutableLiveData<AvatarUpload>
-    var token: String = Const.TOKEN
+    var token: String? = Const.TOKEN
 
     init {
         data1 = MutableLiveData<User>()

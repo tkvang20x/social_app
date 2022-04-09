@@ -14,7 +14,7 @@ import retrofit2.Response
 
 class CommentViewModel :ViewModel() {
     private val api: Api
-    var token: String = Const.TOKEN
+    var token: String? = Const.TOKEN
     var comment :MutableLiveData<List<PostX>>
     var commentsPage :MutableLiveData<List<PostX>>
     var isCheckCmt: MutableLiveData<Boolean>

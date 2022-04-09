@@ -1,6 +1,11 @@
 package com.example.socialapp
 
+import com.example.socialapp.SharedPreference.MySharedPreference
+import com.example.socialapp.fragment.HomeFragment
+import com.example.socialapp.fragment.loginregister.LoginFragment
+
 object Const {
-    const val BASE_URL="https://05ef-42-118-9-45.ngrok.io"
-    const val TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBoYW1oaWV1MTIiLCJzdWIiOiI2MjE2MzUyNTFjNzAxYzI2MzBkNDA0ZDMiLCJpYXQiOjE2NDU2MjI1NzUsImV4cCI6MTY4MTYyMjU3NX0.1EDwHPYMC6Rp6LIA38_lxdCAg_Mb3II3MdOJSXImXps"
+//    var  mMySharedPreference : MySharedPreference = MySharedPreference(HomeFragment().context!!)
+    const val BASE_URL="https://d353-118-68-122-46.ngrok.io"
+   lateinit var TOKEN :String
 }

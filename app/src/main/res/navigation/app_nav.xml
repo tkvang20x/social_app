@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/userFragment"
-        android:name="com.example.socialapp.fragment.UserFragment"
+        android:name="com.example.socialapp.fragment.user.UserFragment"
         android:label="UserFragment">
         <action
             android:id="@+id/action_userFragment_to_profileFragment"
@@ -14,10 +14,13 @@
         <action
             android:id="@+id/action_userFragment_to_createPostFragment"
             app:destination="@id/createPostFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.socialapp.fragment.ProfileFragment"
+        android:name="com.example.socialapp.fragment.user.ProfileFragment"
         android:label="ProfileFragment">
 
 <!--        <argument-->
@@ -28,10 +31,13 @@
         <action
             android:id="@+id/action_profileFragment_to_updateProfile"
             app:destination="@id/updateProfile" />
+        <action
+            android:id="@+id/action_profileFragment_to_userFragment"
+            app:destination="@id/userFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateProfile"
-        android:name="com.example.socialapp.fragment.UpdateProfile"
+        android:name="com.example.socialapp.fragment.user.UpdateProfile"
         android:label="UpdateProfile" >
         <argument android:name="firstName"
                     app:argType="string"/>
@@ -43,6 +49,9 @@
                 app:argType="string"/>
         <argument android:name="university"
                 app:argType="string"/>
+        <action
+            android:id="@+id/action_updateProfile_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -75,9 +84,35 @@
     <fragment
         android:id="@+id/userByIdFragment"
         android:name="com.example.socialapp.fragment.userbyid.UserByIdFragment"
-        android:label="UserByIdFragment" />
+        android:label="UserByIdFragment" >
+        <action
+            android:id="@+id/action_userByIdFragment_to_profileByIdFragment"
+            app:destination="@id/profileByIdFragment" />
+        <action
+            android:id="@+id/action_userByIdFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment" />
+        <action
+            android:id="@+id/action_userByIdFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createPostFragment"
         android:name="com.example.socialapp.fragment.post.CreatePostFragment"
         android:label="CreatePostFragment" />
+    <fragment
+        android:id="@+id/profileByIdFragment"
+        android:name="com.example.socialapp.fragment.userbyid.ProfileByIdFragment"
+        android:label="ProfileByIdFragment" >
+        <action
+            android:id="@+id/action_profileByIdFragment_to_userByIdFragment"
+            app:destination="@id/userByIdFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setting"
+        android:name="com.example.socialapp.fragment.SettingFragment"
+        android:label="SettingFragment" >
+        <action
+            android:id="@+id/action_setting_to_userFragment"
+            app:destination="@id/userFragment" />
+    </fragment>
 </navigation>

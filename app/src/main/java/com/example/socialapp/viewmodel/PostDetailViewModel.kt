@@ -13,7 +13,7 @@ import retrofit2.Response
 
 class PostDetailViewModel :ViewModel() {
     private val api: Api
-    var token: String = Const.TOKEN
+    var token: String? = Const.TOKEN
     var post:MutableLiveData<PostComplete>
     init {
         api= ApiRetrofit.createRetrofit(Const.BASE_URL,Api::class.java)

@@ -1,4 +1,4 @@
-package com.example.socialapp.fragment
+package com.example.socialapp.fragment.user
 
 import android.Manifest
 import android.app.AlertDialog
@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.socialapp.Load
 import com.example.socialapp.R
 import com.example.socialapp.base.BaseFragment
 import com.example.socialapp.databinding.FragmentProfileBinding
@@ -33,9 +34,9 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>() {
 
     override fun initBinding() {
         super.initBinding()
-
+        Load.showLoading(this.context)
         binding.imgBack.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.action_profileFragment_to_userFragment)
         }
 
         binding.tvUpdateProfile.setOnClickListener {
@@ -46,7 +47,14 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>() {
             val highSchool= binding.tvHighSchool.text.toString()
             val university= binding.tvUniversity.text.toString()
 
-            val action=ProfileFragmentDirections.actionProfileFragmentToUpdateProfile(firtName,lastName,gender,highSchool,university)
+            val action=
+                ProfileFragmentDirections.actionProfileFragmentToUpdateProfile(
+                    firtName,
+                    lastName,
+                    gender,
+                    highSchool,
+                    university
+                )
             findNavController().navigate(action)
         }
 
@@ -68,6 +76,7 @@ class ProfileFragment: BaseFragment<FragmentProfileBinding>() {
             }
         })
 
+        Load.hideLoading()
         binding.tvUpdateAvt.setOnClickListener {
             checkPermission()
         }

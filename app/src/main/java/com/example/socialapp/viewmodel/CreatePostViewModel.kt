@@ -25,7 +25,7 @@ class CreatePostViewModel :ViewModel() {
      val api: Api
      var imageUpload: MutableLiveData<ImageUpload>
      var postSucces: MutableLiveData<PostComplete>
-    var token: String = Const.TOKEN
+    var token: String? = Const.TOKEN
     init {
         api =ApiRetrofit.createRetrofit(Const.BASE_URL,Api:: class.java)
         imageUpload = MutableLiveData()
@@ -57,7 +57,7 @@ class CreatePostViewModel :ViewModel() {
         if (imageUpload == null) {
             return null
         } else {
-            for (i in 0 until imageUpload.data.size-1) {
+            for (i in 0 until imageUpload.data.size) {
                 list.add(imageUpload.data[i].filename)
             }
         }

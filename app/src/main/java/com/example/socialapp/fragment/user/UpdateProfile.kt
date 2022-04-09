@@ -1,4 +1,4 @@
-package com.example.socialapp.fragment
+package com.example.socialapp.fragment.user
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.util.Log
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.socialapp.Load
 import com.example.socialapp.R
 import com.example.socialapp.base.BaseFragment
 import com.example.socialapp.databinding.FragmentUpdateProfileBinding
@@ -27,6 +28,7 @@ class UpdateProfile : BaseFragment<FragmentUpdateProfileBinding>() {
 
     override fun initBinding() {
         super.initBinding()
+        Load.showLoading(this.context)
 
         userViewModel = UserViewModel()
         profileViewModel= ProfileViewModel()
@@ -38,6 +40,7 @@ class UpdateProfile : BaseFragment<FragmentUpdateProfileBinding>() {
         binding.edtHighSchool.setText(args.highSchool)
         binding.edtUniversity.setText(args.university)
 
+        Load.hideLoading()
         binding.imgBack.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -92,7 +95,7 @@ class UpdateProfile : BaseFragment<FragmentUpdateProfileBinding>() {
 
             Log.d("xyz","${high_schoolText}+${universityText}")
             dialogInterface.dismiss()
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.action_updateProfile_to_profileFragment)
             val builder2 = AlertDialog.Builder(requireContext())
             builder2.setMessage("Sửa thành công!!!")
             builder2.show()

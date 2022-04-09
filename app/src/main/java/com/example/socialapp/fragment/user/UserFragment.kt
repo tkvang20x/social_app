@@ -1,5 +1,6 @@
-package com.example.socialapp.fragment
+package com.example.socialapp.fragment.user
 
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.example.socialapp.R
@@ -10,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.socialapp.Load
 import com.example.socialapp.adapter.PostAdapter
 import com.example.socialapp.databinding.FragmentUserBinding
@@ -25,6 +27,8 @@ class UserFragment : BaseFragment<FragmentUserBinding>(), PostAdapter.IPost {
     private lateinit var adapter: PostAdapter
     private var page: Int = 0
     private val posts = arrayListOf<PostX>()
+    private var isLastPage = false
+    private var id: String = ""
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_user
@@ -44,8 +48,13 @@ class UserFragment : BaseFragment<FragmentUserBinding>(), PostAdapter.IPost {
 //                ProfileFragment::class.java.toString()
 //            )
 //            fragmentTransaction.commit()
-            val action = UserFragmentDirections.actionUserFragmentToProfileFragment()
+            val action =
+                UserFragmentDirections.actionUserFragmentToProfileFragment()
             findNavController().navigate(action)
+        }
+
+        binding.btnPost.setOnClickListener {
+            findNavController().navigate(R.id.action_userFragment_to_createPostFragment)
         }
 
 
@@ -54,7 +63,7 @@ class UserFragment : BaseFragment<FragmentUserBinding>(), PostAdapter.IPost {
         userViewModel.data1.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 binding.user = it.data
-//                Log.d("user","${it.data.full_name}")
+                id = it.data._id.toString()
             }
         })
 
@@ -82,8 +91,8 @@ class UserFragment : BaseFragment<FragmentUserBinding>(), PostAdapter.IPost {
         })
 //        Load().hideLoading()
 
-        postViewModel = PostViewModel()
-        postViewModel.getPostFirst(page.toString())
+        postViewModel = ViewModelProvider(requireActivity()).get(PostViewModel::class.java)
+        postViewModel.getPostByIdFirst(id,page.toString())
         postViewModel.dataPost.observe(viewLifecycleOwner, {
             if (it != null) {
                 posts.clear()
@@ -99,14 +108,56 @@ class UserFragment : BaseFragment<FragmentUserBinding>(), PostAdapter.IPost {
         binding.rcPostPersonal.adapter = adapter
         binding.rcPostPersonal.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        val visibleItemCount = intArrayOf(0)
+        val totalItemCount = intArrayOf(0)
+        val pastVisiblesItems = intArrayOf(0)
+        binding.rcPostPersonal.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) {
+                    visibleItemCount[0] = binding.rcPostPersonal.childCount
+                    totalItemCount[0] = binding.rcPostPersonal.layoutManager!!.itemCount
+                    pastVisiblesItems[0] =
+                        (binding.rcPostPersonal.layoutManager as LinearLayoutManager?)!!.findFirstVisibleItemPosition()
+                    if (isLastPage) {
+                        return
+                    } else {
+                        if (visibleItemCount[0] + pastVisiblesItems[0] >= totalItemCount[0]) {
+                            loadMore()
+                            Log.d("loadmore", "load")
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    fun loadMore() {
+        page += 1
+        postViewModel.getPostByIdPage(id,page.toString())
+        postViewModel.dataPost.observe(viewLifecycleOwner, {
+            if (it != null) {
+                if (it.data.posts.size == 0) {
+                    isLastPage = true
+                } else {
+//                posts.clear()
+                    posts.addAll(it.data.posts)
+                    adapter.notifyDataSetChanged()
+                    isLastPage = false
+                }
+            } else {
+                return@observe
+            }
+        })
     }
 
     override fun onItemClick(item: PostX?, position: Int?) {
-        TODO("Not yet implemented")
+        val bundle = Bundle()
+        bundle.putParcelable("postX", item)
+        findNavController().navigate(R.id.action_userFragment_to_postDetailFragment, bundle)
     }
 
     override fun onClickAvt(item: PostX?) {
-        TODO("Not yet implemented")
+
     }
 }
 

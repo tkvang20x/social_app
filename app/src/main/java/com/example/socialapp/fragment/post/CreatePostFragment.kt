@@ -55,10 +55,8 @@ class CreatePostFragment : BaseFragment<FragmentCreatePostBinding>() {
 
         binding.btnCreat.setOnClickListener {
             createPostViewModel = ViewModelProvider(requireActivity()).get(CreatePostViewModel::class.java)
-            createPostViewModel.uploadImage(images)
-            Log.d("datalistimage", "${images.toString()}")
             createPostViewModel.imageUpload.observe(viewLifecycleOwner, {
-                Log.d("imageUpload", createPostViewModel.getImageUpload(it).toString())
+//                Log.d("imageUpload", createPostViewModel.getImageUpload(it).toString())
                 if (it == null) {
                     val createPost = CreatePost(
                         Content(
@@ -117,10 +115,14 @@ class CreatePostFragment : BaseFragment<FragmentCreatePostBinding>() {
                     .setCompleteButtonText("Done")
                     .setEmptySelectionText("No Select")
                     .showMultiImage {
+                        createPostViewModel = ViewModelProvider(requireActivity()).get(CreatePostViewModel::class.java)
+
                         for (i in 0 until it.size) {
                             images.add(getPath(it[i]))
+                            Log.d("i","${i}")
                         }
-                        Log.d("image", " ${images.toString()}")
+                        createPostViewModel.uploadImage(images)
+                        Log.d("list","${images.toString()}")
 
                         imageAdapter = ImageAdapter2(it)
                         imageAdapter.notifyDataSetChanged()
@@ -152,7 +154,7 @@ class CreatePostFragment : BaseFragment<FragmentCreatePostBinding>() {
     fun getPath(uri: Uri): MultipartBody.Part {
         val file = File(uri.path)
         val reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-        return MultipartBody.Part.createFormData("avatar", file.name, reqFile)
+        return MultipartBody.Part.createFormData("images", file.name, reqFile)
     }
 
 

@@ -1,5 +1,7 @@
 package com.example.socialapp
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
 import android.widget.EditText
@@ -7,6 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
+import pereira.agnaldo.previewimgcol.ImageCollectionView
 import java.io.File
 
 
@@ -92,5 +97,29 @@ object Utils {
         Glide.with(iv.context)
             .load(File(uri.path))
             .into(iv)
+    }
+
+    @JvmStatic
+    @BindingAdapter("setImageColection")
+    fun setImageColection(icv: ImageCollectionView, links: List<String>?) {
+        if (links != null) {
+            icv.clearImages()
+            for (i in links.indices) {
+                Glide.with(icv.context)
+                    .asBitmap()
+                    .load(Const.BASE_URL.toString() + links[i].replace("\\", "/"))
+                    .into(object : CustomTarget<Bitmap?>() {
+
+                        override fun onLoadCleared(placeholder: Drawable?) {}
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap?>?
+                        ) {
+                          icv.addImage(resource)
+                        }
+                    })
+            }
+        }
+        Glide.with(icv.context).clear(icv)
     }
 }

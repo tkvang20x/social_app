@@ -7,6 +7,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 
 import com.example.socialapp.databinding.ActivityMainBinding
@@ -28,13 +29,19 @@ class MainActivity : AppCompatActivity() {
 
         navController = navHost.navController
 
-        appBarConfig = AppBarConfiguration(setOf(R.id.homeFragment, R.id.userFragment))
-
+        appBarConfig = AppBarConfiguration(setOf(R.id.homeFragment, R.id.userFragment,R.id.setting))
+//        setupActionBarWithNavController(navController,appBarConfig)
         binding.bnvView.setupWithNavController(navController)
 
 
     }
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfig) || super.onSupportNavigateUp()
+    }
+
+     fun refreshCurrentFragment(){
+        val id = navController.currentDestination?.id
+        navController.popBackStack(id!!,true)
+        navController.navigate(id)
     }
 }

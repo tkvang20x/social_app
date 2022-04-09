@@ -17,7 +17,7 @@ class PostViewModel :ViewModel() {
 
     private val api:Api
     var dataPost:MutableLiveData<Post>
-    var token: String = Const.TOKEN
+    var token: String? = Const.TOKEN
 
     init {
         api=ApiRetrofit.createRetrofit(Const.BASE_URL,Api::class.java)
@@ -48,6 +48,41 @@ class PostViewModel :ViewModel() {
                 if(response.body() ==null){
                     dataPost.postValue(null)
                 }else{
+                    dataPost.postValue(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<Post?>, t: Throwable) {
+                Log.d("Error", "Fail: \$response.code()")
+            }
+
+        })
+    }
+
+    fun getPostByIdFirst(id:String,page:String){
+        api.getUserPostsPage("Bearer $token",id,page)!!.enqueue(object :Callback<Post?> {
+            override fun onResponse(call: Call<Post?>, response: Response<Post?>) {
+                if (response.body() ==null){
+                    dataPost.postValue(null)
+                }else {
+                    dataPost.postValue(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<Post?>, t: Throwable) {
+                Log.d("Error", "Fail: \$response.code()")
+            }
+
+        })
+    }
+
+    fun getPostByIdPage(id:String,page:String){
+        dataPost =MutableLiveData()
+        api.getUserPostsPage("Bearer $token",id,page)!!.enqueue(object :Callback<Post?> {
+            override fun onResponse(call: Call<Post?>, response: Response<Post?>) {
+                if (response.body() ==null){
+                    dataPost.postValue(null)
+                }else {
                     dataPost.postValue(response.body())
                 }
             }

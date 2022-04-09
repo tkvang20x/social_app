@@ -1,10 +1,14 @@
 package com.example.socialapp.adapter
 
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.createNavigateOnClickListener
@@ -19,19 +23,27 @@ import com.example.socialapp.callback.BaseListener
 import com.example.socialapp.databinding.ItemPostBinding
 
 import com.example.socialapp.fragment.HomeFragment
+import com.example.socialapp.fragment.HomeFragmentDirections
 import com.example.socialapp.fragment.userbyid.UserByIdFragment
 import com.example.socialapp.model.PostX
 import com.example.socialapp.viewmodel.PostViewModel
+import com.facebook.shimmer.ShimmerFrameLayout
+import com.gun0912.tedpermission.provider.TedPermissionProvider.context
+import pereira.agnaldo.previewimgcol.ImageCollectionView
 
 
 class PostAdapter(private val posts: ArrayList<PostX>, private val listener: IPost) :
     RecyclerView.Adapter<PostAdapter.ViewHolder>() {
+    private val VIEW_TYPE_ITEM = 0
+    private val VIEW_TYPE_LOADING = 1
 
-    class ViewHolder(private val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder( val binding: ItemPostBinding) : RecyclerView.ViewHolder(binding.root) {
         private lateinit var imageAdapter: ImageAdapter
-        private lateinit var navController: NavController
         private lateinit var postViewModel: PostViewModel
         fun bind(postX: PostX) {
+//            var container:ShimmerFrameLayout =binding.smFL
+//            container.startShimmer()
+
             binding.post = postX
 
             var isLike = postX.isLike
@@ -39,12 +51,6 @@ class PostAdapter(private val posts: ArrayList<PostX>, private val listener: IPo
                 binding.btnLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_true, 0, 0, 0)
             }else{
                 binding.btnLike.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_like_svgrepo_com, 0, 0, 0)
-            }
-            binding.ivAvatar.setOnClickListener {
-                val bundle = Bundle()
-                bundle.putString("id", postX.user_id.toString())
-                Log.d("id  user", "${postX.user_id}")
-//                navController.navigate(R.id.action_homeFragment_to_userByIdFragment,bundle)
             }
 
             binding.btnLike.setOnClickListener {
@@ -58,10 +64,7 @@ class PostAdapter(private val posts: ArrayList<PostX>, private val listener: IPo
                 }
 
                 if(isLike==true){
-                    if(postX.total_like!!-1 ==0){
-                        postX.total_like=0
-                        binding.tvLike.text ="0"
-                    }else if(postX.total_like ==0) {
+                   if(postX.total_like ==0) {
                         binding.tvLike.text = postX.total_like!!.plus(1).toString()
                         postX.total_like=1
                     }else{
@@ -92,19 +95,17 @@ class PostAdapter(private val posts: ArrayList<PostX>, private val listener: IPo
             if (postX.content.image?.isEmpty() == true) {
                 return
             } else {
-                if (postX.content.image?.size == 1) {
-                    imageAdapter = ImageAdapter(postX.content.image as ArrayList<String>)
-                    binding.rcImage.adapter = imageAdapter
-                    binding.rcImage.layoutManager = GridLayoutManager(HomeFragment().context, 1)
-                } else if (postX.content.image?.size!! >= 2) {
-                    imageAdapter = ImageAdapter(postX.content.image as ArrayList<String>)
-                    binding.rcImage.adapter = imageAdapter
-                    binding.rcImage.layoutManager = GridLayoutManager(HomeFragment().context, 2)
-                }
+//                if (postX.content.image?.size == 1) {
+//                    imageAdapter = ImageAdapter(postX.content.image as ArrayList<String>)
+//                    binding.rcImage.adapter = imageAdapter
+//                    binding.rcImage.layoutManager = GridLayoutManager(HomeFragment().context, 1)
+//                } else if (postX.content.image?.size!! >= 2) {
+//                    imageAdapter = ImageAdapter(postX.content.image as ArrayList<String>)
+//                    binding.rcImage.adapter = imageAdapter
+//                    binding.rcImage.layoutManager = GridLayoutManager(HomeFragment().context, 2)
+//                }
             }
         }
-
-
     }
 
     interface IPost {
@@ -127,6 +128,9 @@ class PostAdapter(private val posts: ArrayList<PostX>, private val listener: IPo
         holder.itemView.setOnClickListener {
             listener.onItemClick(posts[position], position)
         }
+        holder.binding.ivAvatar.setOnClickListener {
+            listener.onClickAvt(posts[position])
+        }
 
     }
 
@@ -138,5 +142,7 @@ class PostAdapter(private val posts: ArrayList<PostX>, private val listener: IPo
         holder.setIsRecyclable(false)
         super.onViewDetachedFromWindow(holder)
     }
-
+override fun getItemViewType(position: Int): Int {
+    return if (posts.get(position) == null) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
+}
 }

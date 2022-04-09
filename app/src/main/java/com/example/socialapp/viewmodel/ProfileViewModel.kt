@@ -16,7 +16,7 @@ class ProfileViewModel:ViewModel() {
 
    val data2:MutableLiveData<Profile>
      private  val api:Api
-    var token: String = Const.TOKEN
+    var token: String? = Const.TOKEN
     init {
         data2=MutableLiveData<Profile>()
         api=ApiRetrofit.createRetrofit(Const.BASE_URL,Api::class.java)
@@ -53,7 +53,7 @@ class ProfileViewModel:ViewModel() {
     fun getProfileById(userId: String?) {
         api.getMoreProfileById("Bearer $token", userId)!!.enqueue(object : Callback<Profile?> {
             override fun onResponse(call: Call<Profile?>, response: Response<Profile?>) {
-                if (response.body() == null ) {
+                if (response.body() == null   ) {
                     data2.postValue(null)
                 } else {
                     data2.postValue(response.body())
